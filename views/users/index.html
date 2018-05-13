@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Users</title>
+  <link rel="stylesheet" type="text/css" href="/public/css/lib/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/public/css/lib/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/public/css/custom/custom.css">
+</head>
+<body>
+  <span class="component" component="nav"></span>
+
+  <div class="container">
+    <h1><i class="fa fa-users fa-fw"></i> Users</h1>
+    <span class="holder" model="user"></span>
+  </div>
+  <div class="container-fluid">
+    <span class="component" component="footer"></span>
+  </div>
+
+  <script type="text/javascript" src="/public/js/lib/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/public/js/lib/tether.min.js"></script>
+  <script type="text/javascript" src="/public/js/lib/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/public/js/lib/axios.min.js"></script>
+  <script type="text/javascript" src="/public/js/components/components.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      let axiosInterval = setInterval(function () {
+        if(!window.componentsLoaded) return;
+        let id = window.params.id;
+        axios.get('http://localhost:3000/api/user/all').then(res => {
+          console.log("res", res);
+          for(let i = 0; i < res.data.count; i++) {
+            let component = new Component();
+            $('span.holder[model="user"]').append(component.user(res.data.users[i], true));
+          }
+        }).catch(err => {
+          console.log("err", err);
+        });
+        clearInterval(axiosInterval);
+      }, 1);
+    });
+  </script>
+</body>
+</html>
