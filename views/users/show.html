@@ -12,6 +12,8 @@
   <div class="container">
     <h1><i class="fa fa-user fa-fw"> </i> User</h1>
     <span class="holder" model="user"></span>
+    <hr>
+    <h1><i class="fa fa-rss fa-fw"> </i> Posts</h1>
     <span class="holder" model="post"></span>
   </div>
   <div class="container-fluid">
@@ -42,7 +44,11 @@
             $('span.holder[model="post"]').append(component.post(res.data.posts[i]));
           }
         }).catch(err => {
-          console.log("err", err);
+          // console.log("err", err);
+          let component = new Component();
+          $('span.holder[model="user"]').append(component.not_exist("User with id (" + id + ")"));
+          component = new Component();
+          $('span.holder[model="post"]').append(component.not_exist("Posts for User with id (" + id + ")"));
         });
         clearInterval(axiosInterval);
       }, 1);

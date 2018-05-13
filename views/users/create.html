@@ -1,1 +1,108 @@
-create.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create User</title>
+  <link rel="stylesheet" type="text/css" href="/public/css/lib/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/public/css/lib/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/public/css/custom/custom.css">
+</head>
+<body>
+  <span class="component" component="nav"></span>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-plus fa-fw"> </i>
+            Create User
+          </div>
+          <div class="card-block">
+            <div class="row">
+              <div class="col-md-6 offset-md-3">
+                <form>
+                  <div class="form-group">
+                    <label for="name" class="form-control-label">Name</label>
+                    <input class="form-control" type="text" name="name" id="name" required autofocus>
+                    <small class="text-danger" data="name"></small>
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="form-control-label">Email</label>
+                    <input class="form-control" type="email" name="email" id="email" required>
+                    <small class="text-danger" data="email"></small>
+                  </div>
+                  <div class="form-group">
+                    <label for="password" class="form-control-label">Password</label>
+                    <input class="form-control" type="password" name="password" id="password" required>
+                    <small class="text-danger" data="password"></small>
+                  </div>
+                  <div class="form-group">
+                    <label for="password_confirmation" class="form-control-label">Password Confirmation</label>
+                    <input class="form-control" type="password" name="password_confirmation" id="password_confirmation">
+                    <small class="text-danger" data="password_confirmation"></small>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-success float-right" id="create" type="submit">
+                      <i class="fa fa-plus fa-fw"> </i>
+                      Create
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <span class="component" component="footer"></span>
+  </div>
+
+  <script type="text/javascript" src="/public/js/lib/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/public/js/lib/tether.min.js"></script>
+  <script type="text/javascript" src="/public/js/lib/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/public/js/lib/axios.min.js"></script>
+  <script type="text/javascript" src="/public/js/components/components.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('form').submit(function(event) {
+        event.preventDefault();
+        $('small').html("").parent('div.form-group').removeClass('has-danger');
+        let
+          name                  = $('input#name').val(),
+          email                 = $('input#email').val(),
+          password              = $('input#password').val(),
+          password_confirmation = $('input#password_confirmation').val();
+        if(password.length < 6) {
+          $('small[data=password]')
+            .html("Password must be at least 6 characters.")
+            .parent('div.form-group').addClass('has-danger');
+          return;
+        }
+        if(password != password_confirmation) {
+          $('small[data=password_confirmation]')
+            .html("Password not matching.")
+            .parent('div.form-group').addClass('has-danger');
+          return;
+        }
+        axios.post('http://localhost:3000/api/user/create', {
+          name: name,
+          email: email,
+          password: password
+        })
+        .then(res => {
+          console.log("res", res);
+          $('form')[0].reset();
+          alert("Created");
+        }).catch(err => {
+          console.log("err", err);
+          $('small[data=email]')
+            .html("This email is already taken.")
+            .parent('div.form-group').addClass('has-danger');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

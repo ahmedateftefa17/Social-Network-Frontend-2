@@ -16,16 +16,35 @@ function Component () {
       </button>
       <a class="navbar-brand" href="/"><i class="fa fa-telegram fa-fw"> </i> SocialNetwork</a>
 
-      <div class="collapse navbar-collapse nav-right" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/users/all"><i class="fa fa-users fa-fw"> </i> Users</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-users fa-fw"> </i> Users
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/users/all"><i class="fa fa-users fa-fw"> </i> All Users</a>
+              <a class="dropdown-item" href="/users/create"><i class="fa fa-plus fa-fw"> </i> Create User</a>
+              <a class="dropdown-item" href="/users/login"><i class="fa fa-sign-in fa-fw"> </i> Login as User</a>
+            </div>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/groups/all"><i class="fa fa-building fa-fw"> </i> Groups</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-building fa-fw"> </i> Groups
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/groups/all"><i class="fa fa-building fa-fw"> </i> All Groups</a>
+              <a class="dropdown-item" href="/groups/create"><i class="fa fa-plus fa-fw"> </i> Create Group</a>
+            </div>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/posts/all"><i class="fa fa-rss fa-fw"> </i> Posts</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-rss fa-fw"> </i> Posts
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/posts/all"><i class="fa fa-rss fa-fw"> </i> All Posts</a>
+              <a class="dropdown-item" href="/posts/create"><i class="fa fa-plus fa-fw"> </i> Create Post</a>
+            </div>
           </li>
         </ul>
       </div>
@@ -45,6 +64,26 @@ function Component () {
       <div class="row">
         <div class="col text-center text-muted">
           <i class="fa fa-telegram fa-fw"> </i> SocialNetwork <i class="fa fa-copyright fa-fw"> </i> 2018
+        </div>
+      </div>
+    `;
+  }
+
+
+  /**
+   *
+   *
+   *
+   */
+  this.not_exist = function (model) {
+    return `<hr>
+      <div class="row">
+        <div class="col text-center text-muted">
+          <h3>
+            <i class="fa fa-exclamation-circle fa-3x"></i>
+            <br><br>
+            There is no ${model}
+          <h3>
         </div>
       </div>
     `;
