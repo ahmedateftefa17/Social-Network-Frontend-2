@@ -27,31 +27,37 @@
   <script type="text/javascript" src="/public/js/components/components.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      let axiosInterval = setInterval(function () {
+      function __user() {
         if(!window.componentsLoaded) return;
         let id = window.params.id;
         axios.get('http://localhost:3000/api/user/' + id).then(res => {
           console.log("res", res);
           let component = new Component();
-          $('span.holder[model="user"]').append(component.user(res.data.user));
+          $('span.holder[model="user"]').html(component.user(res.data.user));
         }).catch(err => {
           console.log("err", err);
         });
         axios.get('http://localhost:3000/api/post/' + id + "/user").then(res => {
           console.log("res", res);
-          for(let i = 0; i < res.data.count; i++) {
+          $('span.holder[model="post"]').html("");
+          if(res.data.count) for(let i = 0; i < res.data.count; i++) {
             let component = new Component();
             $('span.holder[model="post"]').append(component.post(res.data.posts[i]));
+          } else {
+            component = new Component();
+            $('span.holder[model="post"]').html(component.not_exist("Posts for User with id (" + id + ")"));
           }
         }).catch(err => {
-          // console.log("err", err);
           let component = new Component();
           $('span.holder[model="user"]').append(component.not_exist("User with id (" + id + ")"));
           component = new Component();
           $('span.holder[model="post"]').append(component.not_exist("Posts for User with id (" + id + ")"));
         });
-        clearInterval(axiosInterval);
-      }, 1);
+      }
+      __user();
+      let axiosInterval = setInterval(function () {
+        __user();
+      }, 5000);
     });
   </script>
 </body>

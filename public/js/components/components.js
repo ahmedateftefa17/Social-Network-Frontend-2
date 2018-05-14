@@ -124,9 +124,14 @@ function Component () {
     return `<hr>
       <div class="row">
         <div class="col">
-          ID: ${post._id}<br>
           Body: ${post.body}<br>
-          Likes: ${Object.keys(post.likes).length}
+          Likes: <span post-id="${post._id}">${Object.keys(post.likes).length}</span>
+          <br>
+          <form id="addLikeForm">
+            <input type="hidden" value="${post._id}" name="postId">
+            <button class="btn btn-info btn-sm"><i class="fa fa-thumbs-up fa-fw"></i></button>
+          </form>
+          <small class="text-danger" post-error="${post._id}"></small>
         </div>
         <div class="col text-right">
           <a href="/posts/${post._id}"><i class="fa fa-rss fa-fw"> </i> View Post</a>

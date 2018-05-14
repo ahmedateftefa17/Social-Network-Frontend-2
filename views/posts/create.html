@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login User</title>
+  <title>Create Post</title>
   <link rel="stylesheet" type="text/css" href="/public/css/lib/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/lib/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/custom/custom.css">
@@ -14,27 +14,21 @@
       <div class="col">
         <div class="card">
           <div class="card-header">
-            <i class="fa fa-sign-in fa-fw"> </i>
-            Login User
+            <i class="fa fa-plus fa-fw"> </i>
+            Create Post
           </div>
           <div class="card-block">
             <div class="row">
               <div class="col-md-6 offset-md-3">
                 <form>
                   <div class="form-group">
-                    <label for="email" class="form-control-label">Email</label>
-                    <input class="form-control" type="email" name="email" id="email" required>
-                    <small class="text-danger" data="email"></small>
+                    <textarea style="resize: none;" rows="5" class="form-control" name="body" id="body" required autofocus placeholder="Write Post ..."></textarea>
+                    <small class="text-danger" data="body"></small>
                   </div>
                   <div class="form-group">
-                    <label for="password" class="form-control-label">Password</label>
-                    <input class="form-control" type="password" name="password" id="password" required>
-                    <small class="text-danger" data="password"></small>
-                  </div>
-                  <div class="form-group">
-                    <button class="btn btn-success float-right" id="login" type="submit">
-                      <i class="fa fa-sign-in fa-fw"> </i>
-                      Login
+                    <button class="btn btn-success float-right" id="create" type="submit">
+                      <i class="fa fa-plus fa-fw"> </i>
+                      Create
                     </button>
                   </div>
                 </form>
@@ -60,16 +54,23 @@
         event.preventDefault();
         $('small').html("").parent('div.form-group').removeClass('has-danger');
         let
-          email                 = $('input#email').val(),
-          password              = $('input#password').val();
-        axios.post('http://localhost:3000/api/user/login', {
-          email: email,
-          password: password
+          body                  = $('textarea#body').val(),
+          user                  = localStorage.getItem('userId');
+          console.log(user);
+        axios.post('http://localhost:3000/api/post/create', {
+          body: body,
+          user: user
         })
         .then(res => {
           console.log("res", res);
-          localStorage.setItem('userId' , res.data.user._id);
-
+          if(res.data['success']) {
+            $('form')[0].reset();
+            alert("Created");
+          } else {
+            $('small[data=email]')
+              .html(res.data['error'])
+              .parent('div.form-group').addClass('has-danger');
+          }
         }).catch(err => {
           console.log("err", err);
         });

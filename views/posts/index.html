@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>All Users</title>
+  <title>All Posts</title>
   <link rel="stylesheet" type="text/css" href="/public/css/lib/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/lib/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/custom/custom.css">
@@ -10,8 +10,8 @@
   <span class="component" component="nav"></span>
 
   <div class="container">
-    <h1><i class="fa fa-users fa-fw"></i> Users</h1>
-    <span class="holder" model="user"></span>
+    <h1><i class="fa fa-rss fa-fw"></i> Posts</h1>
+    <span class="holder" model="post"></span>
   </div>
   <div class="container-fluid">
     <span class="component" component="footer"></span>
@@ -24,27 +24,52 @@
   <script type="text/javascript" src="/public/js/components/components.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      function __users_all() {
+      const user = localStorage.getItem('userId');
+      function __posts_all() {
         if(!window.componentsLoaded) return;
         let id = window.params.id;
-        $('span.holder[model="user"]').html('');
-        axios.get('http://localhost:3000/api/user/all').then(res => {
+        $('span.holder[model="post"]').html('');
+        axios.get('http://localhost:3000/api/post/all').then(res => {
           console.log("res", res);
           if(res.data.count) for(let i = 0; i < res.data.count; i++) {
             let component = new Component();
-            $('span.holder[model="user"]').append(component.user(res.data.users[i], true));
+            $('span.holder[model="post"]').append(component.post(res.data.posts[i], true));
           } else {
             let component = new Component();
-            $('span.holder[model="user"]').append(component.not_exist("Users"));
+            $('span.holder[model="post"]').append(component.not_exist("Posts"));
           }
         }).catch(err => {
           console.log("err", err);
         });
       }
-      __users_all();
+      __posts_all();
       let axiosInterval = setInterval(function () {
-        __users_all();
-      }, 5000);
+        __posts_all();
+      }, 2000000000);
+
+      /**
+      *
+      * @function: addLike
+      * @param : post.id
+      */
+
+      $('body').delegate('form#addLikeForm', 'submit', function(event) {
+        event.preventDefault();
+        let __id = $(this).children('input').val();
+
+        axios.patch('http://localhost:3000/api/post/' + __id + '/addLike', {
+          likes: [user]
+        })
+        .then(res => {
+          if(res['success']) {
+            console.log('res' , res.data);
+            $('span[post-id="' + __id + '"]').html(Number($('span[post-id="' + __id + '"]').html()) + 1);
+          }
+        })
+        .catch(err => {
+          console.log('err' , err);
+        });
+      });
     });
   </script>
 </body>

@@ -32,10 +32,10 @@ const
  */
 const publicRoute = require('./routes/public');
 const userRoute = require('./routes/user');
-// const postRoute = require('./routes/post');
+const postRoute = require('./routes/post');
 // const groupRoute = require('./routes/group');
 
 app.use('/users', userRoute);
 app.use('/public', publicRoute);
-// app.use('/posts', postRoute);
+app.use('/posts', postRoute);
 // app.use('/groups', groupRoute);

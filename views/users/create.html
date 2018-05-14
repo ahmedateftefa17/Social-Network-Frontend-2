@@ -93,13 +93,16 @@
         })
         .then(res => {
           console.log("res", res);
-          $('form')[0].reset();
-          alert("Created");
+          if(res.data['success']) {
+            $('form')[0].reset();
+            alert("Created");
+          } else {
+            $('small[data=email]')
+              .html(res.data['error'])
+              .parent('div.form-group').addClass('has-danger');
+          }
         }).catch(err => {
           console.log("err", err);
-          $('small[data=email]')
-            .html("This email is already taken.")
-            .parent('div.form-group').addClass('has-danger');
         });
       });
     });
