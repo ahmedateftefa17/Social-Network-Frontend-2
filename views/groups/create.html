@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Create Post</title>
+  <title>Create Group</title>
   <link rel="stylesheet" type="text/css" href="/public/css/lib/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/lib/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/custom/custom.css">
@@ -15,17 +15,15 @@
         <div class="card">
           <div class="card-header">
             <i class="fa fa-plus fa-fw"> </i>
-            Create Post
+            Create Group
           </div>
           <div class="card-block">
             <div class="row">
               <div class="col-md-6 offset-md-3">
                 <form>
                   <div class="form-group">
-                    <textarea style="resize: none;" rows="5" class="form-control" name="body" id="body" required autofocus placeholder="Write Post ..."></textarea>
-                    <br>
-                    <input class="form-control" name="group-id" id="group-id"  placeholder="Group ID If you want to post it to a group"></input>
-                    <small class="text-danger" data="body"></small>
+                    <input class="form-control" name="title" id="title" required autofocus placeholder="Group Title ..."></input>
+                    <small class="text-danger" data="title"></small>
                   </div>
                   <div class="form-group">
                     <button class="btn btn-success float-right" id="create" type="submit">
@@ -56,51 +54,25 @@
         event.preventDefault();
         $('small').html("").parent('div.form-group').removeClass('has-danger');
         let
-          body                  = $('textarea#body').val(),
-          group                 = $('input#group-id').val(),
-          user                  = localStorage.getItem('userId');
-
-
-          if(group){
-            axios.post('http://localhost:3000/api/group/addPost', {
-              body: body,
-              user: user,
-              group: group
-            })
-            .then(res => {
-              console.log("res", res);
-              if(res.data['success']) {
-                $('form')[0].reset();
-                alert(`Created With the group ${group}`);
-              } else {
-                $('small[data=email]')
-                  .html(res.data['error'])
-                  .parent('div.form-group').addClass('has-danger');
-              }
-            }).catch(err => {
-              console.log("err", err);
-            });
-          }else{
-              axios.post('http://localhost:3000/api/post/create', {
-              body: body,
-              user: user,
-            })
-            .then(res => {
-              console.log("res", res);
-              if(res.data['success']) {
-                $('form')[0].reset();
-                alert("Created for public");
-              } else {
-                $('small[data=email]')
-                  .html(res.data['error'])
-                  .parent('div.form-group').addClass('has-danger');
-              }
-            }).catch(err => {
-              console.log("err", err);
-            });
+          title                 = $('input#title').val(),
+          admin                 = localStorage.getItem('userId');
+        axios.post('http://localhost:3000/api/group/create', {
+          title: title,
+          admin: admin
+        })
+        .then(res => {
+          console.log("res", res);
+          if(res.data['success']) {
+            $('form')[0].reset();
+            alert("Created");
+          } else {
+            $('small[data=email]')
+              .html(res.data['error'])
+              .parent('div.form-group').addClass('has-danger');
           }
-
-
+        }).catch(err => {
+          console.log("err", err);
+        });
       });
     });
   </script>

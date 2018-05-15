@@ -108,6 +108,10 @@ function Component () {
           ID: ${user._id}<br>
           Name: ${user.name}<br>
           Email: ${user.email}<br>
+          <form id="AddUserForm">
+            <input type="hidden" value="${user._id}" name="GroupId">
+            <button class="btn btn-info btn-sm">Add ${user.name}</button>
+          </form>
         </div>
         ${link}
       </div>
@@ -135,6 +139,30 @@ function Component () {
         </div>
         <div class="col text-right">
           <a href="/posts/${post._id}"><i class="fa fa-rss fa-fw"> </i> View Post</a>
+        </div>
+      </div>
+    `;
+  }  
+
+
+  /**
+   *
+   *
+   *
+   */
+  this.group = function (group, count = 0) {
+    return `<hr>
+      <div class="row">
+        <div class="col">
+          ID: ${group._id}<br>
+          Title: ${group.title}<br>
+          Number of Members: <span group-id="${group._id}">${group.users.length}</span>
+          <br>
+          <form id="JoinGroupForm">
+            <input type="hidden" value="${group._id}" name="GroupId">
+            <button class="btn btn-info btn-sm">Join Group</button>
+          </form>
+          <small class="text-danger" group-error="${group._id}"></small>
         </div>
       </div>
     `;
