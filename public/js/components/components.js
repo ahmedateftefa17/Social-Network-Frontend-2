@@ -23,6 +23,7 @@ function Component () {
               <i class="fa fa-users fa-fw"> </i> Users
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/users/mostfollowed"><i class="fa fa-users fa-fw"> </i> Most Followed Users</a>
               <a class="dropdown-item" href="/users/all"><i class="fa fa-users fa-fw"> </i> All Users</a>
               <a class="dropdown-item" href="/users/create"><i class="fa fa-plus fa-fw"> </i> Create User</a>
               <a class="dropdown-item" href="/users/login"><i class="fa fa-sign-in fa-fw"> </i> Login as User</a>
@@ -42,6 +43,7 @@ function Component () {
               <i class="fa fa-rss fa-fw"> </i> Posts
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/posts/mostLiked"><i class="fa fa-rss fa-fw"> </i> Most Liked Posts</a>
               <a class="dropdown-item" href="/posts/all"><i class="fa fa-rss fa-fw"> </i> All Posts</a>
               <a class="dropdown-item" href="/posts/create"><i class="fa fa-plus fa-fw"> </i> Create Post</a>
             </div>
@@ -110,7 +112,7 @@ function Component () {
           Email: ${user.email}<br>
           <form id="AddUserForm">
             <input type="hidden" value="${user._id}" name="GroupId">
-            <button class="btn btn-info btn-sm">Add ${user.name}</button>
+            <button class="btn btn-info btn-sm">Follow ${user.name}</button>
           </form>
         </div>
         ${link}
@@ -124,7 +126,63 @@ function Component () {
    *
    *
    */
+  this.mostFollowed = function (user, view = false) {
+    let link = ``;
+    if(view)
+      link = `<div class="col text-right">
+          <a href="/users/${user._id}"><i class="fa fa-search fa-fw"> </i> View User</a>
+        </div>`;
+
+    return `<hr>
+      <div class="row">
+        <div class="col">
+          Followers Count: ${user.follower_count}<br>
+          Name: ${user.name}<br>
+          ID: ${user._id}<br>
+          <form id="AddUserForm">
+            <input type="hidden" value="${user._id}" name="GroupId">
+            <button class="btn btn-info btn-sm">Follow ${user.name}</button>
+          </form>
+        </div>
+        ${link}
+      </div>
+    `;
+  }
+
+
+
+  /**
+   *
+   *
+   *
+   */
   this.post = function (post, likes = false) {
+    return `<hr>
+      <div class="row">
+        <div class="col">
+          Body: ${post.body}<br>
+          Likes: <span post-id="${post._id}">${Object.keys(post.likes).length}</span>
+          <br>
+          <form id="addLikeForm">
+            <input type="hidden" value="${post._id}" name="postId">
+            <button class="btn btn-info btn-sm"><i class="fa fa-thumbs-up fa-fw"></i></button>
+          </form>
+          <small class="text-danger" post-error="${post._id}"></small>
+        </div>
+        <div class="col text-right">
+          <a href="/posts/${post._id}"><i class="fa fa-rss fa-fw"> </i> View Post</a>
+        </div>
+      </div>
+    `;
+  }  
+
+
+ /**
+   *
+   *
+   *
+   */
+  this.mostLiked = function (post, likes = false) {
     return `<hr>
       <div class="row">
         <div class="col">
@@ -162,6 +220,13 @@ function Component () {
             <input type="hidden" value="${group._id}" name="GroupId">
             <button class="btn btn-info btn-sm">Join Group</button>
           </form>
+
+            <div class="col text-right">
+              <a class="btn btn-info btn-sm" href="/groups/${group._id}">
+               Show Posts
+              </a>
+            </div>
+
           <small class="text-danger" group-error="${group._id}"></small>
         </div>
       </div>

@@ -44,6 +44,11 @@ router.get('/login', (req, res, next) => {
   view(res, 'users.login');
 })
 
+
+router.get('/mostFollowed', (req, res, next) => {
+  view(res, 'users.mostFollowed');
+})
+
 /**
  * @Method: GET
  * @Functionality : Show User By ID

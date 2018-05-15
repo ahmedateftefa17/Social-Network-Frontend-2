@@ -36,5 +36,11 @@ router.get('/create', (req, res, next) => {
 });
 
 
+router.get('/:id', (req, res, next) => {
+  const id = req.params.id;
+  view(res, 'groups.groupPosts', {id: id});
+})
+
+
 
 module.exports = router;

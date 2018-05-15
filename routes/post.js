@@ -26,6 +26,10 @@ router.get('/all', (req, res, next) => {
   view(res, 'posts.index');
 })
 
+router.get('/mostliked', (req, res, next) => {
+  view(res, 'posts.mostLiked');
+})
+
 /**
  * @Method: GET
  * @Functionality: Show Create User

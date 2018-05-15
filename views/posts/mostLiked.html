@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>All Groups</title>
+  <title>All Posts</title>
   <link rel="stylesheet" type="text/css" href="/public/css/lib/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/lib/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/custom/custom.css">
@@ -10,8 +10,8 @@
   <span class="component" component="nav"></span>
 
   <div class="container">
-    <h1><i class="fa fa-rss fa-fw"></i> Groups</h1>
-    <span class="holder" model="group"></span>
+    <h1><i class="fa fa-rss fa-fw"></i> Posts</h1>
+    <span class="holder" model="post"></span>
   </div>
   <div class="container-fluid">
     <span class="component" component="footer"></span>
@@ -25,53 +25,55 @@
   <script type="text/javascript">
     $(document).ready(function() {
       const user = localStorage.getItem('userId');
-
-      function __groups_all() {
+      function __posts_all() {
         if(!window.componentsLoaded) return;
         let id = window.params.id;
-        $('span.holder[model="group"]').html('');
-        axios.get('http://localhost:3000/api/group/all').then(res => {
+        $('span.holder[model="post"]').html('');
+        axios.get('http://localhost:3000/api/post/mostLiked').then(res => {
           console.log("res", res);
-          if(res.data.count) for(let i = 0; i < res.data.count; i++) {
-            let component = new Component();
-            $('span.holder[model="group"]').append(component.group(res.data.groups[i], res.data.groups[i]));
-          } else {
-            let component = new Component();
-            $('span.holder[model="group"]').append(component.not_exist("Groups"));
-          }
+          // if(res.data.count) {
+          //   let mostLikedcomponent = new Component();
+          //   $('span.holder[model="post"]').append(mostLikedcomponent.mostLiked(res.data.posts[i], true));
+          //   for(let i = 0; i < res.data.count; i++) {
+          //   let component = new Component();
+          //   $('span.holder[model="post"]').append(component.mostLiked(res.data.posts[i], true));
+          // }
+          // } else {
+          //   let component = new Component();
+          //   $('span.holder[model="post"]').append(component.not_exist("Posts"));
+          // }
         }).catch(err => {
           console.log("err", err);
         });
       }
-
-      __groups_all();
-
-
+      __posts_all();
       let axiosInterval = setInterval(function () {
         __posts_all();
       }, 2000000000);
 
+      /**
+      *
+      * @function: addLike
+      * @param : post.id
+      */
 
-      $('body').delegate('form#JoinGroupForm', 'submit', function(event) {
+      $('body').delegate('form#addLikeForm', 'submit', function(event) {
         event.preventDefault();
         let __id = $(this).children('input').val();
-        console.log(__id);
-        axios.patch('http://localhost:3000/api/group/addUser', {
-          group: __id,
-          user: user
+
+        axios.patch('http://localhost:3000/api/post/' + __id + '/addLike', {
+          likes: [user]
         })
         .then(res => {
           if(res['success']) {
             console.log('res' , res.data);
-            alert("You've joined this group!");
+            $('span[post-id="' + __id + '"]').html(Number($('span[post-id="' + __id + '"]').html()) + 1);
           }
         })
         .catch(err => {
           console.log('err' , err);
         });
       });
-
-
       
     });
   </script>

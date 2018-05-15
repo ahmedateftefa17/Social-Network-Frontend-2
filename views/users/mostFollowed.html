@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>All Groups</title>
+  <title>All Users</title>
   <link rel="stylesheet" type="text/css" href="/public/css/lib/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/lib/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/public/css/custom/custom.css">
@@ -10,8 +10,8 @@
   <span class="component" component="nav"></span>
 
   <div class="container">
-    <h1><i class="fa fa-rss fa-fw"></i> Groups</h1>
-    <span class="holder" model="group"></span>
+    <h1><i class="fa fa-users fa-fw"></i> Users</h1>
+    <span class="holder" model="user"></span>
   </div>
   <div class="container-fluid">
     <span class="component" component="footer"></span>
@@ -24,46 +24,50 @@
   <script type="text/javascript" src="/public/js/components/components.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      const user = localStorage.getItem('userId');
-
-      function __groups_all() {
+      function __users_all() {
         if(!window.componentsLoaded) return;
         let id = window.params.id;
-        $('span.holder[model="group"]').html('');
-        axios.get('http://localhost:3000/api/group/all').then(res => {
+        $('span.holder[model="user"]').html('');
+        axios.get('http://localhost:3000/api/user/mostFollowed').then(res => {
           console.log("res", res);
-          if(res.data.count) for(let i = 0; i < res.data.count; i++) {
-            let component = new Component();
-            $('span.holder[model="group"]').append(component.group(res.data.groups[i], res.data.groups[i]));
+          console.log(res.data.users.length);
+          if(res.data.mostFollowed) {
+            // console.log("Yes");
+            let mostLikedComponent = new Component();
+            $('span.holder[model="user"]').append(mostLikedComponent.mostFollowed(res.data.mostFollowed, true));
+            for(let i = 0; i < res.data.users.length; i++) {
+              let component = new Component();
+              $('span.holder[model="user"]').append(component.mostFollowed(res.data.users[i], true));
+            }
           } else {
             let component = new Component();
-            $('span.holder[model="group"]').append(component.not_exist("Groups"));
+            $('span.holder[model="user"]').append(component.not_exist("Users"));
           }
         }).catch(err => {
           console.log("err", err);
         });
       }
-
-      __groups_all();
-
-
+      __users_all();
       let axiosInterval = setInterval(function () {
-        __posts_all();
-      }, 2000000000);
+        __users_all();
+      }, 20000000);
 
 
-      $('body').delegate('form#JoinGroupForm', 'submit', function(event) {
+      $('body').delegate('form#AddUserForm', 'submit', function(event) {
         event.preventDefault();
+        let user = localStorage.getItem('userId');
         let __id = $(this).children('input').val();
+
+        console.log(user);
         console.log(__id);
-        axios.patch('http://localhost:3000/api/group/addUser', {
-          group: __id,
-          user: user
+        axios.post('http://localhost:3000/api/user/addFollower', {
+          user: user,
+          following: __id
         })
         .then(res => {
           if(res['success']) {
             console.log('res' , res.data);
-            alert("You've joined this group!");
+            console.log("You followed This user");
           }
         })
         .catch(err => {
@@ -71,8 +75,6 @@
         });
       });
 
-
-      
     });
   </script>
 </body>
